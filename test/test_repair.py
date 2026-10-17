@@ -12,22 +12,22 @@ from .mock_helper import w_mock
 
 
 def test_model_init_zero():
-    g = repair.Stats()
-    assert g.total == 0
-    assert g.success_cnt == 0
-    assert g.fail_cnt == 0
+    stats = repair.Stats()
+    assert stats.total == 0
+    assert stats.success_cnt == 0
+    assert stats.fail_cnt == 0
 
 
 def test_model_reset():
-    g = repair.Stats()
-    g.reset(111, 222, 333)
-    assert g.total == 111
-    assert g.success_cnt == 222
-    assert g.fail_cnt == 333
+    stats = repair.Stats()
+    stats.reset(111, 222, 333)
+    assert stats.total == 111
+    assert stats.success_cnt == 222
+    assert stats.fail_cnt == 333
 
 
 def test_model_reset_listen():
-    g = repair.Stats()
+    stats = repair.Stats()
     expected = 1
     assert_val = 0
 
@@ -35,20 +35,20 @@ def test_model_reset_listen():
         nonlocal assert_val
         assert_val = grp.total
 
-    g.listen('reset', callback)
-    g.reset(expected)
+    stats.listen('reset', callback)
+    stats.reset(expected)
 
     assert assert_val == expected
 
 
 def test_model_incSuccessCnt():
-    g = repair.Stats()
-    g.incSuccessCnt()
-    assert g.success_cnt == 1
+    stats = repair.Stats()
+    stats.incSuccessCnt()
+    assert stats.success_cnt == 1
 
 
 def test_model_incSuccessCnt_listen():
-    g = repair.Stats()
+    stats = repair.Stats()
     expected = 1
     assert_val = 0
 
@@ -56,20 +56,20 @@ def test_model_incSuccessCnt_listen():
         nonlocal assert_val
         assert_val = grp.success_cnt
 
-    g.listen('incSuccessCnt', callback)
-    g.incSuccessCnt()
+    stats.listen('incSuccessCnt', callback)
+    stats.incSuccessCnt()
 
     assert assert_val == expected
 
 
 def test_model_incFailCnt():
-    g = repair.Stats()
-    g.incFailCnt()
-    assert g.fail_cnt == 1
+    stats = repair.Stats()
+    stats.incFailCnt()
+    assert stats.fail_cnt == 1
 
 
 def test_model_incFailCnt_listen():
-    g = repair.Stats()
+    stats = repair.Stats()
     expected = 1
     assert_val = 0
 
@@ -77,8 +77,8 @@ def test_model_incFailCnt_listen():
         nonlocal assert_val
         assert_val = grp.fail_cnt
 
-    g.listen('incFailCnt', callback)
-    g.incFailCnt()
+    stats.listen('incFailCnt', callback)
+    stats.incFailCnt()
 
     assert assert_val == expected
 

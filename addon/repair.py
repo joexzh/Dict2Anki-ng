@@ -4,6 +4,7 @@ import json
 import logging
 import typing as T
 
+import anki.errors
 import aqt
 import aqt.utils
 
@@ -91,13 +92,16 @@ class Repair:
         self._listen_ui_events()
 
     def _listen_ui_events(self):
-
-        def on_enter_pressed():
+        def _on_press():
             text = self._w.repairFilterLineEdit.text()
-            note_ids = noteManager.get_note_ids(self._w.conf.deck, text)
-            self._w.repairFilterLabel.setText(str(len(note_ids)))
+            try:
+                note_ids = noteManager.get_note_ids(self._w.conf.deck, text)
+                self._w.repairFilterLabel.setText(str(len(note_ids)))
+            except anki.errors.SearchError as e:
+                # defer showing dialog to detach from current press event
+                aqt.QTimer.singleShot(0, lambda e=e: aqt.utils.show_critical(str(e), parent=self._w))
 
-        self._w.repairFilterLineEdit.returnPressed.connect(on_enter_pressed)
+        self._w.repairFilterLineEdit.returnPressed.connect(_on_press)
         self._w.repairBtn.clicked.connect(self._on_repairBtnClick)
 
     def _register_model_events(self, model: RepairModel):
@@ -196,7 +200,7 @@ Deck：          {conf.deck}
 
         ast_dict, errmsg = adv_conf.ensure_ast_dict_errmsg_for_ui(selected_ast_dict_tuple)
         if errmsg:
-            aqt.utils.show_critical(errmsg)
+            aqt.utils.show_critical(errmsg, parent=self._w)
             return
 
         if not self._w.conf.advanced_enabled and not self._checkLoginState():
@@ -208,7 +212,23 @@ Deck：          {conf.deck}
             return
 
         self._ensured_selected_dict = ast_dict
-        self._repair()
+
+        self._w.repairProgressQueryLabel.clear()
+        self._w.repairProgressAudioLabel.clear()
+
+        try:
+            self._notes = list(noteManager.getNotesByDeckName(self._w.conf.deck, self._w.repairFilterLineEdit.text()))
+        except anki.errors.SearchError as e:
+            aqt.utils.show_critical(str(e), parent=self._w)
+            return
+
+        if len(self._notes) == 0:
+            self._writeLogAndLabel('没有要更新的笔记', self._w.repairProgressNoteLabel)
+            return
+
+        self._enable_ui(False)
+        self._model.note_stats.reset(len(self._notes))
+        self._queryWords(self._notes)
 
     def _checkLoginState(self) -> bool:
         self._writeLogAndLabel('正在检查登录信息 . . .', self._w.repairProgressNoteLabel)
@@ -230,19 +250,6 @@ Deck：          {conf.deck}
 
         else:
             return True
-
-    def _repair(self):
-        self._enable_ui(False)
-        self._w.repairProgressQueryLabel.clear()
-        self._w.repairProgressAudioLabel.clear()
-
-        self._notes = list(noteManager.getNotesByDeckName(self._w.conf.deck, self._w.repairFilterLineEdit.text()))
-        if len(self._notes) == 0:
-            self._writeLogAndLabel('没有要更新的笔记', self._w.repairProgressNoteLabel)
-            return self._complete(None, None)
-
-        self._model.note_stats.reset(len(self._notes))
-        self._queryWords(self._notes)
 
     def _queryWords(self, notes):
         self._query_cache_list = [{}] * len(notes)

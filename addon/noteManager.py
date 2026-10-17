@@ -39,6 +39,9 @@ def get_note_ids(deckName: str, other_cond: T.Optional[str] = None):
     """Don't forget to escape `"` in `other_cond`.
     E.g., `other_cond = f'term:"{word} flag:1"'`, caller must escape
     double-quotes in `word`, replace `"` with `\\"`.
+
+    Raises:
+        anki.errors.SearchError
     """
     assert aqt.mw.col is not None
 
@@ -64,6 +67,9 @@ def getNoteIds(wordList: T.Iterable[str], deckName: str) -> list[notes.NoteId]:
 def getNotesByDeckName(deckName: str, other_cond: T.Optional[str] = None):
     """Don't forget to escape `"` in `other_cond`.
     E.g., `other_cond = f'term:"{word}"'`, you must escape double-quotes in `word`.
+
+    Raises:
+        anki.errors.SearchError when evaluating each item.
     """
     assert aqt.mw.col is not None
     return (aqt.mw.col.get_note(nid) for nid in get_note_ids(deckName, other_cond))
