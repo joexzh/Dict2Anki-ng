@@ -291,16 +291,13 @@ Deck：          {conf.deck}
             if flag_ref[0] >= 0:
                 flaged += 1
 
-            def move_audio(word: str, field: str):
+            # move audio file
+            for field in (C.F_AMEPRON, C.F_BREPRON):
                 if ast := self._ensured_selected_dict.get(field):
                     if ast.eval(adv_conf.MoveAudioVisitor(word, field)):
                         self._model.audio_stats.incSuccessCnt()
                     else:
                         self._model.audio_stats.incFailCnt()
-
-            # move audio file
-            move_audio(word, C.F_AMEPRON)
-            move_audio(word, C.F_BREPRON)
 
         noteManager.updateNotes(self._notes)
         self._model.note_stats.fail_cnt = flaged
