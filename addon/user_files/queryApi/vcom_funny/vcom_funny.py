@@ -26,7 +26,7 @@ def parse(vcom_word: VCOMWord) -> Optional[_T.QueryWordData]:
         chunks.append('<div>')
 
         group = 0
-        group_iter = map(lambda d: d['group'], definitions)
+        group_iter = (d['group'] for d in definitions)
         first_group = next(group_iter)
         only_one_group = all(g == first_group for g in group_iter)
         last_pos = ''
@@ -64,9 +64,12 @@ def parse(vcom_word: VCOMWord) -> Optional[_T.QueryWordData]:
         else:
             chunks.append(f'{sen}')
 
-        chunks.append(
-            f'<div><cite>{vcom_s["title"]}</cite> by {vcom_s["author"]}({datetime.datetime.fromtimestamp(vcom_s["date"] / 1000, datetime.timezone.utc).year})</div>'
-        )
+        # timestamp can be negative
+        timestamp = vcom_s.get('date')
+        dt = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc) + datetime.timedelta(seconds=timestamp / 1000)
+        year = dt.year
+
+        chunks.append(f'<div><cite>{vcom_s["title"]}</cite> by {vcom_s["author"]}({year})</div>')
 
         # no front, only back
         sentence.append(('', ''.join(chunks)))
