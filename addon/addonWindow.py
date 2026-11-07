@@ -85,8 +85,8 @@ class Windows(QDialog, main_ui.Ui_Dialog):
         layout.addWidget(template.Template(self.tplTab))
 
     def listen_ui_events(self):
-        def on_tab_change(index: int):
-            if index == 2 and not self.tplTab.layout():
+        def on_tab_change(_index: int):
+            if self.tabWidget.currentWidget() == self.tplTab and not self.tplTab.layout():
                 # lazy load when first click on tplTab
                 self.init_tpl_ui()
 
