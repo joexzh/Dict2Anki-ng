@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>588</width>
-    <height>618</height>
+    <height>631</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -245,81 +245,43 @@
           <string>高级设置</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="advEnableCB">
-            <property name="text">
-             <string>启用高级设置</string>
-            </property>
-           </widget>
+          <item row="6" column="0">
+           <layout class="QHBoxLayout" name="advUsPronHLayout">
+            <item>
+             <widget class="QLabel" name="advUsPronLabel">
+              <property name="text">
+               <string>美式发音</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="ClickableLineEdit" name="advUsPronLineEdit">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="4">
-           <widget class="QCheckBox" name="advEnableUserModCB">
-            <property name="toolTip">
-             <string>加载 user_files 中的词典和 API 模块</string>
-            </property>
-            <property name="text">
-             <string>启用用户模块</string>
-            </property>
-            <property name="icon">
-             <iconset theme="QIcon::ThemeIcon::HelpAbout"/>
-            </property>
-           </widget>
+          <item row="3" column="1">
+           <layout class="QHBoxLayout" name="advSentenceHLayout">
+            <item>
+             <widget class="QLabel" name="advSentenceLabel">
+              <property name="text">
+               <string>例句</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="ClickableLineEdit" name="advSentenceLineEdit">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="5" column="0">
-           <layout class="QHBoxLayout" name="advEnPhonetic">
-            <item>
-             <widget class="QLabel" name="advEnPhoneticLabel">
-              <property name="text">
-               <string>英式音标</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="ClickableLineEdit" name="advEnPhoneticLineEdit">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="7" column="0">
-           <layout class="QHBoxLayout" name="advEnPronHLayout">
-            <item>
-             <widget class="QLabel" name="advEnPronLabel">
-              <property name="text">
-               <string>英式发音</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="ClickableLineEdit" name="advEnPronLineEdit">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="3" column="4">
-           <layout class="QHBoxLayout" name="advImageHLayout">
-            <item>
-             <widget class="QLabel" name="advImageLabel">
-              <property name="text">
-               <string>图片</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="ClickableLineEdit" name="advImageLineEdit">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="5" column="4">
            <layout class="QHBoxLayout" name="advUsPhoneticHLayout">
             <item>
              <widget class="QLabel" name="advUsPhoneticLabel">
@@ -337,17 +299,91 @@
             </item>
            </layout>
           </item>
-          <item row="7" column="4">
-           <layout class="QHBoxLayout" name="advUsPronHLayout">
+          <item row="4" column="0">
+           <layout class="QHBoxLayout" name="advImageHLayout">
             <item>
-             <widget class="QLabel" name="advUsPronLabel">
+             <widget class="QLabel" name="advImageLabel">
               <property name="text">
-               <string>美式发音</string>
+               <string>图片</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="ClickableLineEdit" name="advUsPronLineEdit">
+             <widget class="ClickableLineEdit" name="advImageLineEdit">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="5" column="1">
+           <layout class="QHBoxLayout" name="advEnPronHLayout">
+            <item>
+             <widget class="QLabel" name="advEnPronLabel">
+              <property name="text">
+               <string>英式发音</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="ClickableLineEdit" name="advEnPronLineEdit">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="1">
+           <layout class="QHBoxLayout" name="advEnPhonetic">
+            <item>
+             <widget class="QLabel" name="advEnPhoneticLabel">
+              <property name="text">
+               <string>英式音标</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="ClickableLineEdit" name="advEnPhoneticLineEdit">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="advEnableCB">
+            <property name="text">
+             <string>启用高级设置</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="advEnableUserModCB">
+            <property name="toolTip">
+             <string>加载 user_files 中的词典和 API 模块</string>
+            </property>
+            <property name="text">
+             <string>启用用户模块</string>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::HelpAbout"/>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="advPhraseHLayout">
+            <item>
+             <widget class="QLabel" name="advPhraseLabel">
+              <property name="text">
+               <string>短语</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="ClickableLineEdit" name="advPhraseLineEdit">
               <property name="readOnly">
                <bool>true</bool>
               </property>
@@ -376,35 +412,17 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="4">
-           <layout class="QHBoxLayout" name="advPhraseHLayout">
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="advEtymHLayout">
             <item>
-             <widget class="QLabel" name="advPhraseLabel">
+             <widget class="QLabel" name="advEtymLabel">
               <property name="text">
-               <string>短语</string>
+               <string>词源</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="ClickableLineEdit" name="advPhraseLineEdit">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="3" column="0">
-           <layout class="QHBoxLayout" name="advSentenceHLayout">
-            <item>
-             <widget class="QLabel" name="advSentenceLabel">
-              <property name="text">
-               <string>例句</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="ClickableLineEdit" name="advSentenceLineEdit">
+             <widget class="ClickableLineEdit" name="advEtymLineEdit">
               <property name="readOnly">
                <bool>true</bool>
               </property>
@@ -431,17 +449,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0" rowspan="3">
-           <widget class="QCheckBox" name="imageCheckBox">
-            <property name="text">
-             <string>图片</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" rowspan="2">
+          <item row="5" column="0" rowspan="2">
            <widget class="QRadioButton" name="noPronRadioButton">
             <property name="text">
              <string>无发音</string>
@@ -454,36 +462,10 @@
             </attribute>
            </widget>
           </item>
-          <item row="5" column="2">
-           <widget class="QRadioButton" name="AmEPronRadioButton">
-            <property name="text">
-             <string>美式发音</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">pronButtonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QRadioButton" name="BrEPronRadioButton">
-            <property name="text">
-             <string>英式发音</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">pronButtonGroup</string>
-            </attribute>
-           </widget>
-          </item>
           <item row="0" column="1">
-           <widget class="QCheckBox" name="phraseCheckBox">
+           <widget class="QCheckBox" name="etymCheckBox">
             <property name="text">
-             <string>短语</string>
+             <string>词源</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -500,7 +482,27 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="phraseCheckBox">
+            <property name="text">
+             <string>短语</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="imageCheckBox">
+            <property name="text">
+             <string>图片</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
            <widget class="QCheckBox" name="BrEPhoneticCheckBox">
             <property name="text">
              <string>英式英标</string>
@@ -510,7 +512,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="2">
+          <item row="2" column="0">
            <widget class="QCheckBox" name="AmEPhoneticCheckBox">
             <property name="text">
              <string>美式英标</string>
@@ -518,6 +520,32 @@
             <property name="checked">
              <bool>true</bool>
             </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QRadioButton" name="BrEPronRadioButton">
+            <property name="text">
+             <string>英式发音</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">pronButtonGroup</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QRadioButton" name="AmEPronRadioButton">
+            <property name="text">
+             <string>美式发音</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">pronButtonGroup</string>
+            </attribute>
            </widget>
           </item>
          </layout>

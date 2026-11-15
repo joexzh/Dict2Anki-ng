@@ -23,7 +23,7 @@ class Parser:
             return 'https:' + url
         else:
             return url
-        
+
     @staticmethod
     def __make_pron_url(url):
         if not url or 'http' in url:
@@ -38,14 +38,14 @@ class Parser:
         if not div:
             return ret
 
-        els = div.select('li') # 多词性
-        if not els: # 单一词性
+        els = div.select('li')  # 多词性
+        if not els:  # 单一词性
             els = div.select('.exp')
-        if not els: # 还有一奇怪的情况，不在任何的标签里面，比如 https://dict.eudic.net/dicts/en/encyclopedia
+        if not els:  # 还有一奇怪的情况，不在任何的标签里面，比如 https://dict.eudic.net/dicts/en/encyclopedia
             # 移除一些干扰text
-            els_rm = div.select('#trans') # 时态text
+            els_rm = div.select('#trans')  # 时态text
             els_rm.extend(div.select('script'))
-            els_rm.extend(div.select('a')) # 赞踩这些字样
+            els_rm.extend(div.select('a'))  # 赞踩这些字样
             for el_rm in els_rm:
                 if not el_rm.decomposed:
                     el_rm.decompose()
@@ -62,28 +62,25 @@ class Parser:
         if self._pronunciations:
             return self._pronunciations
 
-        pron = {
-            C.F_BREPHONETIC: '',
-            C.F_BREPRON: '',
-            C.F_AMEPHONETIC: '',
-            C.F_AMEPRON: ''
-        }
+        pron = {C.F_BREPHONETIC: '', C.F_BREPRON: '', C.F_AMEPHONETIC: '', C.F_AMEPRON: ''}
 
         try:
             if el_phon_line := self._soap.select_one('.phonitic-line'):
                 links = el_phon_line.select('a')
                 phons = el_phon_line.select('.Phonitic')
 
-                if len(links) == 1: # 存在<a>标签，1个发音，例如 https://dict.eudic.net/dicts/en/hyperplane
+                if len(links) == 1:  # 存在<a>标签，1个发音，例如 https://dict.eudic.net/dicts/en/hyperplane
                     pron[C.F_BREPRON] = self.__make_pron_url(links[0]['data-rel'])
                     pron[C.F_AMEPRON] = self.__make_pron_url(links[0]['data-rel'])
                     pron[C.F_BREPHONETIC] = phons[0].get_text(strip=True)
                     pron[C.F_AMEPHONETIC] = phons[0].get_text(strip=True)
-                elif len(links) > 1: # 存在<a>标签，2个发音
+                elif len(links) > 1:  # 存在<a>标签，2个发音
                     pron[C.F_BREPRON] = self.__make_pron_url(links[0]['data-rel'])
                     pron[C.F_AMEPRON] = self.__make_pron_url(links[1]['data-rel'])
                     pron[C.F_BREPHONETIC] = phons[0].get_text(strip=True)
-                    pron[C.F_AMEPHONETIC] = phons[0].get_text(strip=True) if len(phons) == 1 else phons[1].get_text(strip=True)
+                    pron[C.F_AMEPHONETIC] = (
+                        phons[0].get_text(strip=True) if len(phons) == 1 else phons[1].get_text(strip=True)
+                    )
             elif link := self._soap.select_one('div .gv_details .voice-button'):
                 # 只有"全球发音"，没有音标
                 pron[C.F_BREPRON] = self.__make_pron_url(link['data-rel'])
@@ -155,19 +152,21 @@ class Parser:
         return QueryWordData(
             term=self.term,
             definition=self.definition,
+            etymology=('', ''),
             phrase=self.phrase,
             image=self.image,
             sentence=self.sentence,
             BrEPhonetic=self.BrEPhonetic,
             AmEPhonetic=self.AmEPhonetic,
             BrEPron=self.BrEPron,
-            AmEPron=self.AmEPron
+            AmEPron=self.AmEPron,
         )
 
 
 class API(AbstractQueryAPI):
     import warnings
-    warnings.warn("Deprecated. Will be removed next major version release.", DeprecationWarning, stacklevel=2)
+
+    warnings.warn('Deprecated. Will be removed next major version release.', DeprecationWarning, stacklevel=2)
 
     name = '欧路词典 API'
     desc = '已过时，不推荐使用'

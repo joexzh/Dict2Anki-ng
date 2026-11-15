@@ -24,10 +24,10 @@ class Parser:
             ec = []
 
         try:
-            ee = [ d['pos'] + d['tr'][0]['l']['i'] for d in self._result['ee']['word']['trs']]
+            ee = [d['pos'] + d['tr'][0]['l']['i'] for d in self._result['ee']['word']['trs']]
         except KeyError:
             ee = []
-        
+
         ec += ee
 
         try:
@@ -37,17 +37,26 @@ class Parser:
         return ec if ec else web_trans
 
     @property
+    def etymology(self) -> tuple[str, str]:
+        en_str = ''
+        zh_str = ''
+
+        etyms = self._result.get('etym', {}).get('etyms', {})
+        if etyms:
+            if en := etyms.get('en'):
+                en_str = en[0]['value'].replace('\n', '<br>')
+            if zh := etyms.get('zh'):
+                zh_str = zh[0]['value'].replace('\n', '<br>')
+
+        return (en_str, zh_str)
+
+    @property
     def pronunciations(self) -> dict[str, str]:
         if self._pronunciations:
             return self._pronunciations
 
         url = 'http://dict.youdao.com/dictvoice?audio='
-        pron = {
-            C.F_AMEPHONETIC: '',
-            C.F_AMEPRON: '',
-            C.F_BREPHONETIC: '',
-            C.F_BREPRON: ''
-        }
+        pron = {C.F_AMEPHONETIC: '', C.F_AMEPRON: '', C.F_BREPHONETIC: '', C.F_BREPRON: ''}
         try:
             pron[C.F_AMEPHONETIC] = self._result['simple']['word'][0]['usphone']
         except KeyError:
@@ -87,19 +96,25 @@ class Parser:
         return self.pronunciations[C.F_BREPRON]
 
     @property
-    def AmEPron(self)->str:
+    def AmEPron(self) -> str:
         """美式发音url"""
         return self.pronunciations[C.F_AMEPRON]
 
     @property
     def sentence(self) -> list[tuple[str, str]]:
         try:
-            return [(s['sentence'], s['sentence-translation'],) for s in self._result['blng_sents_part']['sentence-pair']]
+            return [
+                (
+                    s['sentence'],
+                    s['sentence-translation'],
+                )
+                for s in self._result['blng_sents_part']['sentence-pair']
+            ]
         except KeyError:
             return []
 
     @property
-    def image(self)-> str:
+    def image(self) -> str:
         try:
             return [i['image'] for i in self._result['pic_dict']['pic']][0]
         except (KeyError, IndexError):
@@ -111,9 +126,10 @@ class Parser:
         return [
             (
                 p.get('phr', dict()).get('headword', dict()).get('l', dict()).get('i', None),
-                p.get('phr', dict()).get('trs', [dict()])[0].get('tr', dict()).get('l', dict()).get('i', None)
+                p.get('phr', dict()).get('trs', [dict()])[0].get('tr', dict()).get('l', dict()).get('i', None),
             )
-            for p in phrase if phrase
+            for p in phrase
+            if phrase
         ]
 
     @property
@@ -121,24 +137,30 @@ class Parser:
         return QueryWordData(
             term=self.term,
             definition=self.definition,
+            etymology=self.etymology,
             phrase=self.phrase,
             image=self.image,
             sentence=self.sentence,
             BrEPhonetic=self.BrEPhonetic,
             AmEPhonetic=self.AmEPhonetic,
             BrEPron=self.BrEPron,
-            AmEPron=self.AmEPron
+            AmEPron=self.AmEPron,
         )
 
 
 class API(AbstractQueryAPI):
     name = '有道 API'
-    desc = '有道词典公开 API'
+    desc = '有道词典公开 API, 包括字段：释义、词源、短语、例句、图片、音标、英式音标、美式音标、英式发音、美式发音'
     # 重用 dictionary.Youdao 的 session
     timeout = dictionary.youdao.Dict.timeout
     session = dictionary.youdao.Dict.session
     url = 'https://dict.youdao.com/jsonapi'
-    params = {"dicts": {"count": 99, "dicts": [["ec", "ee", "phrs", "pic_dict"], ["web_trans"], ["fanyi"], ["blng_sents_part"]]}}
+    params = {
+        'dicts': {
+            'count': 99,
+            'dicts': [['ec', 'ee', 'phrs', 'pic_dict', 'etym'], ['web_trans'], ['fanyi'], ['blng_sents_part']],
+        }
+    }
     parser = Parser
 
     @classmethod

@@ -3,14 +3,12 @@ from __future__ import annotations
 import typing as T
 
 from . import _typing as _T
+from . import constants as C
 from . import dictionary, queryApi
 from .misc import enc_cookies
 
 if T.TYPE_CHECKING:
     from .conf_model import Conf
-
-
-LATEST_VERSION = 3
 
 
 def migrate_v1_v2(confmap: _T.ConfigMap):
@@ -89,6 +87,11 @@ def migrate_v2_v3(confmap: _T.ConfigMap):
     del confmap['credential']  # type: ignore
 
 
+def migrate_v3_v4(confmap: _T.ConfigMap):
+    confmap['version'] = 4
+    confmap['advanced_fields'][C.F_ETYM] = ''
+
+
 def migrate_version(conf: Conf):
     """
     Migrate to latest version
@@ -99,4 +102,8 @@ def migrate_version(conf: Conf):
     if 'selectedDict' in conf._map:
         migrate_v1_v2(conf._map)
         migrate_v2_v3(conf._map)
+        conf._dirty = True
+
+    if conf.version == 3:
+        migrate_v3_v4(conf._map)
         conf._dirty = True

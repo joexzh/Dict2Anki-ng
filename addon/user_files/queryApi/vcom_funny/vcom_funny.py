@@ -84,6 +84,7 @@ def parse(vcom_word: VCOMWord) -> Optional[_T.QueryWordData]:
     return _T.QueryWordData(
         term=term,
         definition=definition,
+        etymology=('', ''),
         phrase=[],
         image='',
         sentence=sentence,
@@ -106,7 +107,7 @@ class API(_T.AbstractQueryAPI):
     """
 
     name = 'funny Vocabulary.com API'
-    desc = '不适合所有人；释义摘取两段趣味解释，有可能为空；只有释义、英式音标、美式音标、美式发音有数据，其他字段为空'
+    desc = '无中文翻译，不适合所有人；释义摘取两段趣味解释，有可能为空；包含字段：释义、例句、英式音标、美式音标、美式发音'
     session = session
 
     @classmethod

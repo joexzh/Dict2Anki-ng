@@ -6,8 +6,8 @@ from addon import workers
 
 
 class DummyWorker(workers.AbstractWorker):
-    sig_1 = aqt.pyqtSignal()
-    sig_2 = aqt.pyqtSignal(str)
+    sig_1 = aqt.pyqtSignal()  # type: ignore[call-arg]
+    sig_2 = aqt.pyqtSignal(str)  # type: ignore[call-arg]
 
     def __init__(self):
         super().__init__()
@@ -36,12 +36,8 @@ def test_workerman_destroy_disconnect():
     worker.sig_2.connect(on_sig_2)
     man.start(worker)
 
-    assert 2 == aqt.QObject.receivers(worker, worker.sig_1) + aqt.QObject.receivers(
-        worker, worker.sig_2
-    )
+    assert 2 == aqt.QObject.receivers(worker, worker.sig_1) + aqt.QObject.receivers(worker, worker.sig_2)
 
     man.destroy()
 
-    assert 0 == aqt.QObject.receivers(worker, worker.sig_1) + aqt.QObject.receivers(
-        worker, worker.sig_2
-    )
+    assert 0 == aqt.QObject.receivers(worker, worker.sig_1) + aqt.QObject.receivers(worker, worker.sig_2)
