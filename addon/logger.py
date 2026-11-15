@@ -3,7 +3,7 @@ from aqt import pyqtSignal, QObject
 
 
 class Handler(QObject, logging.Handler):
-    newRecord = pyqtSignal(object)
+    newRecord = pyqtSignal(object)  # type: ignore[call-arg]
 
     def __init__(self, parent):
         super().__init__(parent)

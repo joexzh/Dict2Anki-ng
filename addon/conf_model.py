@@ -54,10 +54,10 @@ class Conf(_T.ListenableModel):
         super().__init__()
         # require valid `config` returned from `mw.addonManager.getConfig`
         self._map: _T.ConfigMap = conf
-        self._ast_dict: dict[str, tuple[T.Optional[adv_conf.Ast], str]] = self._make_ast_dict()
         self._dirty = False
-
         migrate_version(self)
+
+        self._ast_dict: dict[str, tuple[T.Optional[adv_conf.Ast], str]] = self._make_ast_dict()
 
     def _make_ast_from_bool(self, val: bool) -> adv_conf.Ast:
         return adv_conf.ApiAst(self.selected_api) if val else adv_conf.EmptyAst()
@@ -65,6 +65,7 @@ class Conf(_T.ListenableModel):
     def _make_ast_dict_old(self):
         ast_dict: dict[str, tuple[T.Optional[adv_conf.Ast], str]] = {}
         ast_dict[C.F_DEFINITION] = (self._make_ast_from_bool(self.definition), '')
+        ast_dict[C.F_ETYM] = (self._make_ast_from_bool(self.etym), '')
         ast_dict[C.F_SENTENCE] = (self._make_ast_from_bool(self.sentence), '')
         ast_dict[C.F_IMAGE] = (self._make_ast_from_bool(self.image), '')
         ast_dict[C.F_PHRASE] = (self._make_ast_from_bool(self.phrase), '')
@@ -77,6 +78,7 @@ class Conf(_T.ListenableModel):
     def _make_ast_dict_advanced(self):
         ast_dict: dict[str, tuple[T.Optional[adv_conf.Ast], str]] = {}
         ast_dict[C.F_DEFINITION] = adv_conf.make_ast(self.advanced_definition)
+        ast_dict[C.F_ETYM] = adv_conf.make_ast(self.advanced_etym)
         ast_dict[C.F_SENTENCE] = adv_conf.make_ast(self.advanced_sentence)
         ast_dict[C.F_IMAGE] = adv_conf.make_ast(self.advanced_image)
         ast_dict[C.F_PHRASE] = adv_conf.make_ast(self.advanced_phrase)
@@ -190,6 +192,17 @@ class Conf(_T.ListenableModel):
         self._map[C.F_DEFINITION] = val
         if not self.advanced_enabled:
             self._ast_dict[C.F_DEFINITION] = (self._make_ast_from_bool(val), '')
+
+    @property
+    def etym(self):
+        return self._map[C.F_ETYM]
+
+    @etym.setter
+    @_set_dirty
+    def etym(self, val: bool):
+        self._map[C.F_ETYM] = val
+        if not self.advanced_enabled:
+            self._ast_dict[C.F_ETYM] = (self._make_ast_from_bool(val), '')
 
     @property
     def image(self):
@@ -335,6 +348,17 @@ class Conf(_T.ListenableModel):
         self.advanced_fields[C.F_SENTENCE] = val
         if self.advanced_enabled:
             self._ast_dict[C.F_SENTENCE] = adv_conf.make_ast(val)
+
+    @property
+    def advanced_etym(self):
+        return self.advanced_fields[C.F_ETYM]
+
+    @advanced_etym.setter
+    @_set_dirty
+    def advanced_etym(self, val: str):
+        self.advanced_fields[C.F_ETYM] = val
+        if self.advanced_enabled:
+            self._ast_dict[C.F_ETYM] = adv_conf.make_ast(val)
 
     @property
     def advanced_image(self):

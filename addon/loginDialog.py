@@ -13,7 +13,7 @@ logger = logging.getLogger('dict2Anki')
 
 
 class LoginDialog(QDialog, loginDialog.Ui_LoginDialog):
-    loginSucceed = pyqtSignal(str)
+    loginSucceed = pyqtSignal(str)  # type: ignore[call-arg]
 
     def __init__(self, loginUrl, loginCheckCallbackFn, parent=None):
         super().__init__(parent)

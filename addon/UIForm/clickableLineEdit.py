@@ -4,7 +4,7 @@ from aqt import QLineEdit, QMouseEvent, pyqtSignal
 
 
 class ClickableLineEdit(QLineEdit):
-    clicked = pyqtSignal(object)
+    clicked = pyqtSignal(object)  # type: ignore[call-arg]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -30,6 +30,7 @@ def test_ast_old_at_init():
     conf = new_conf()
 
     assert isinstance(conf._ast_dict[C.F_DEFINITION][0], adv_conf.ApiAst)
+    assert isinstance(conf._ast_dict[C.F_ETYM][0], adv_conf.ApiAst)
     assert isinstance(conf._ast_dict[C.F_PHRASE][0], adv_conf.ApiAst)
     assert isinstance(conf._ast_dict[C.F_SENTENCE][0], adv_conf.ApiAst)
     assert isinstance(conf._ast_dict[C.F_IMAGE][0], adv_conf.ApiAst)
@@ -151,6 +152,24 @@ def test_definition():
     # test AST should not change because default `advanced_enabled` is False
     conf.advanced_definition = 'api:hello'
     assert isinstance(conf._ast_dict[C.F_DEFINITION][0], adv_conf.EmptyAst)
+
+
+def test_etym():
+    # test value can be assigned. Default `definition` is True
+
+    conf = new_conf()
+    conf.etym = False
+
+    assert conf.etym is False
+    assert conf.is_dirty() is True
+
+    # test AST can be made, should be `EmptyFConfAST`
+
+    assert isinstance(conf._ast_dict[C.F_ETYM][0], adv_conf.EmptyAst)
+
+    # test AST should not change because default `advanced_enabled` is False
+    conf.advanced_definition = 'api:hello'
+    assert isinstance(conf._ast_dict[C.F_ETYM][0], adv_conf.EmptyAst)
 
 
 def test_definition_dirty():
@@ -365,6 +384,7 @@ def new_conf_adv():
     confmap['advanced_fields']['enabled'] = True
     confmap['advanced_fields']['enable_user_modules'] = True
     confmap['advanced_fields']['definition'] = conf_str
+    confmap['advanced_fields']['etymology'] = conf_str
     confmap['advanced_fields']['sentence'] = conf_str
     confmap['advanced_fields']['phrase'] = conf_str
     confmap['advanced_fields']['image'] = conf_str
@@ -381,6 +401,7 @@ def test_adv_ast_at_init():
     conf = new_conf_adv()
 
     assert isinstance(conf._ast_dict[C.F_DEFINITION][0], adv_conf.OrAst)
+    assert isinstance(conf._ast_dict[C.F_ETYM][0], adv_conf.OrAst)
     assert isinstance(conf._ast_dict[C.F_SENTENCE][0], adv_conf.OrAst)
     assert isinstance(conf._ast_dict[C.F_PHRASE][0], adv_conf.OrAst)
     assert isinstance(conf._ast_dict[C.F_IMAGE][0], adv_conf.OrAst)
@@ -433,6 +454,22 @@ def test_adv_definition():
     # test AST should not change because `advanced_enabled` is True
     conf.definition = True
     assert isinstance(conf._ast_dict[C.F_DEFINITION][0], adv_conf.FlagAst)
+
+
+def test_adv_etym():
+    # test value can be assigned
+
+    conf = new_conf_adv()
+    conf.advanced_etym = 'flag:1'
+
+    assert conf.advanced_etym == 'flag:1'
+    # test AST is changed
+    assert isinstance(conf._ast_dict[C.F_ETYM][0], adv_conf.FlagAst)
+    assert conf.is_dirty() is True
+
+    # test AST should not change because `advanced_enabled` is True
+    conf.etym = True
+    assert isinstance(conf._ast_dict[C.F_ETYM][0], adv_conf.FlagAst)
 
 
 def test_adv_sentence():
@@ -615,7 +652,7 @@ def test_decode_cookies_at_init():
     cookies = """azAZ09~!@#$%^&*()_+-=[]{}\\|;:'",<.>/?~`"""
     cookies_enc = misc.enc_cookies(cookies)
 
-    confmap = helper.fresh_v3_confmap()
+    confmap = helper.fresh_latest_confmap()
     confmap['credentials'] = {
         dictionary.eudict.Dict.name: {'cookie_encoded': cookies_enc},
         dictionary.youdao.Dict.name: {'cookie_encoded': ''},

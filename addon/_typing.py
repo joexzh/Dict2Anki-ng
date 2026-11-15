@@ -23,6 +23,7 @@ class Advanced_Fields(T.TypedDict):
     enabled: bool
     enable_user_modules: bool
     definition: str
+    etymology: str
     sentence: str
     image: str
     phrase: str
@@ -58,6 +59,7 @@ class ConfigMap(T.TypedDict):
 
     credentials: dict[str, Credential]
     definition: bool
+    etymology: bool
     sentence: bool
     image: bool
     phrase: bool
@@ -110,6 +112,7 @@ class AbstractDictionary(ABC):
 class QueryWordData(T.TypedDict):
     term: str
     definition: list[str]
+    etymology: tuple[str, str]  # en, zh
     phrase: list[tuple[str, str]]
     image: str
     sentence: list[tuple[str, str]]

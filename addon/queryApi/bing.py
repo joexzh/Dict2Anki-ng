@@ -66,6 +66,7 @@ class Parser:
         return QueryWordData(
             term=self.term,
             definition=self.definition,
+            etymology=('', ''),
             phrase=[],
             image=self.image,
             sentence=self.sentence,

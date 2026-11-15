@@ -9,7 +9,7 @@ from .UIForm import adv_conf_dialog
 
 def make_api_btn(api: type[AbstractQueryAPI], parent: T.Optional[QWidget]) -> QPushButton:
     icon = QIcon.fromTheme(QIcon.ThemeIcon.HelpAbout)
-    btn = QPushButton(icon=icon, text=f'api:"{api.name}"', parent=parent)
+    btn = QPushButton(icon, f'api:"{api.name}"', parent=parent)
     btn.setStyleSheet("""
         QPushButton {
             text-align: left;

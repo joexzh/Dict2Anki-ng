@@ -47,6 +47,7 @@ class ConfCtl:
         set_api_combobox_tooltip(w.apiComboBox, conf.selected_api)
         w.cookieLineEdit.setText(conf.current_cookies)
         w.definitionCheckBox.setChecked(conf.definition)
+        w.etymCheckBox.setChecked(conf.etym)
         w.imageCheckBox.setChecked(conf.image)
         w.sentenceCheckBox.setChecked(conf.sentence)
         w.phraseCheckBox.setChecked(conf.phrase)
@@ -94,6 +95,7 @@ class ConfCtl:
         w.advEnableCB.setChecked(conf.advanced_enabled)
         w.advEnableUserModCB.setChecked(conf.advanced_enable_user_modules)
         w.advDefinitionLineEdit.setText(conf.advanced_definition)
+        w.advEtymLineEdit.setText(conf.advanced_etym)
         w.advPhraseLineEdit.setText(conf.advanced_phrase)
         w.advSentenceLineEdit.setText(conf.advanced_sentence)
         w.advImageLineEdit.setText(conf.advanced_image)
@@ -114,6 +116,9 @@ class ConfCtl:
 
         w.advDefinitionLabel.setEnabled(enabled)
         w.advDefinitionLineEdit.setEnabled(enabled)
+
+        w.advEtymLabel.setEnabled(enabled)
+        w.advEtymLineEdit.setEnabled(enabled)
 
         w.advPhraseLabel.setEnabled(enabled)
         w.advPhraseLineEdit.setEnabled(enabled)
@@ -166,6 +171,9 @@ class ConfCtl:
         def _on_adv_definition_line_edit_change(val: str):
             conf.advanced_definition = val
 
+        def _on_adv_etym_line_edit_change(val: str):
+            conf.advanced_etym = val
+
         def _on_adv_phrase_line_edit_change(val: str):
             conf.advanced_phrase = val
 
@@ -192,6 +200,9 @@ class ConfCtl:
 
         w.advDefinitionLineEdit.clicked.connect(_on_adv_line_edit_click)
         w.advDefinitionLineEdit.textChanged.connect(_on_adv_definition_line_edit_change)
+
+        w.advEtymLineEdit.clicked.connect(_on_adv_line_edit_click)
+        w.advEtymLineEdit.textChanged.connect(_on_adv_etym_line_edit_change)
 
         w.advPhraseLineEdit.clicked.connect(_on_adv_line_edit_click)
         w.advPhraseLineEdit.textChanged.connect(_on_adv_phrase_line_edit_change)
@@ -236,6 +247,9 @@ class ConfCtl:
         def _on_definition_cb_change(state: int):
             conf.definition = state == Qt.CheckState.Checked.value
 
+        def _on_etym_cb_change(state: int):
+            conf.etym = state == Qt.CheckState.Checked.value
+
         def _on_sentence_cb_change(state):
             conf.sentence = state == Qt.CheckState.Checked.value
 
@@ -276,6 +290,7 @@ class ConfCtl:
         w.apiComboBox.currentTextChanged.connect(_on_api_combobox_change)
         w.cookieLineEdit.textChanged.connect(_on_cookie_line_edit_change)
         w.definitionCheckBox.stateChanged.connect(_on_definition_cb_change)
+        w.etymCheckBox.stateChanged.connect(_on_etym_cb_change)
         w.sentenceCheckBox.stateChanged.connect(_on_sentence_cb_change)
         w.phraseCheckBox.stateChanged.connect(_on_phrase_cb_change)
         w.imageCheckBox.stateChanged.connect(_on_image_cb_change)

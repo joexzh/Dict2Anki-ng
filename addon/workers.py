@@ -19,7 +19,7 @@ from ._typing import AbstractDictionary, QueryWordData
 
 
 class AbstractWorker(QObject):
-    done = pyqtSignal(object)
+    done = pyqtSignal(object)  # type: ignore[call-arg]
     'Workers must use done to emit itself before run() returns, otherwise leak!'
 
     def __init__(self, parent=None):
@@ -68,7 +68,7 @@ class WorkerManager:
 
 
 class VersionCheckWorker(AbstractWorker):
-    haveNewVersion = pyqtSignal(str, str)
+    haveNewVersion = pyqtSignal(str, str)  # type: ignore[call-arg]
     _logger = logging.getLogger('dict2Anki.workers.UpdateCheckWorker')
 
     def __init__(self):
@@ -93,8 +93,8 @@ class VersionCheckWorker(AbstractWorker):
 
 
 class LoginStateCheckWorker(AbstractWorker):
-    logSuccess = pyqtSignal(str)
-    logFailed = pyqtSignal()
+    logSuccess = pyqtSignal(str)  # type: ignore[call-arg]
+    logFailed = pyqtSignal()  # type: ignore[call-arg]
 
     def __init__(self, checkFn, cookie):
         super().__init__()
@@ -111,9 +111,9 @@ class LoginStateCheckWorker(AbstractWorker):
 
 
 class RemoteWordFetchingWorker(AbstractWorker):
-    tick = pyqtSignal()
-    setProgress = pyqtSignal(int)
-    doneThisGroup = pyqtSignal(list)
+    tick = pyqtSignal()  # type: ignore[call-arg]
+    setProgress = pyqtSignal(int)  # type: ignore[call-arg]
+    doneThisGroup = pyqtSignal(list)  # type: ignore[call-arg]
     _logger = logging.getLogger('dict2Anki.workers.RemoteWordFetchingWorker')
 
     def __init__(self, selectedDict: type[AbstractDictionary], groups: list[tuple[str, str]]):
@@ -146,8 +146,8 @@ class RemoteWordFetchingWorker(AbstractWorker):
 class ApiASTWorker(AbstractWorker):
     "eval AST with ApiFConfVisitor"
 
-    rowSuccess = pyqtSignal(int, str, dict)  # row, word, query_cache
-    rowFail = pyqtSignal(int, str, dict)  # row, word, query_cache
+    rowSuccess = pyqtSignal(int, str, dict)  # row, word, query_cache # type: ignore[call-arg]
+    rowFail = pyqtSignal(int, str, dict)  # row, word, query_cache # type: ignore[call-arg]
     _logger = logging.getLogger('dict2Anki.workers.ApiASTWorker')
 
     def __init__(

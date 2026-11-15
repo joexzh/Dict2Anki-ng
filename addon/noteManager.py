@@ -100,20 +100,30 @@ def getOrCreateDeck(deckName, model):
     return deck
 
 
+def add_fields(model: models.NoteType, flds: list[str]):
+    assert aqt.mw.col
+    mm = aqt.mw.col.models
+
+    fld_map = mm.field_map(model)
+    for i, f in enumerate(flds):
+        if f not in fld_map:
+            new_fld = mm.new_field(f)
+            mm.add_field(model, new_fld)
+            mm.reposition_field(model, new_fld, i)
+            logger.info(f'新增字段 {f}')
+
+
 def getOrCreateModel() -> models.NoteType:
     assert aqt.mw.col
+
     model = aqt.mw.col.models.by_name(C.MODEL_NAME)
     if model:
-        if set([f['name'] for f in model['flds']]) == set(C.MODEL_FIELDS):
-            return model
-        else:
-            logger.warning('模版字段异常，自动删除重建')
-            aqt.mw.col.models.remove(model['id'])
+        add_fields(model, C.MODEL_FIELDS)
+        return model
 
     logger.info(f'创建新模版:{C.MODEL_NAME}')
     model = aqt.mw.col.models.new(C.MODEL_NAME)
-    for field_name in C.MODEL_FIELDS:
-        aqt.mw.col.models.add_field(model, aqt.mw.col.models.new_field(field_name))
+    add_fields(model, C.MODEL_FIELDS)
     return model
 
 
@@ -216,6 +226,7 @@ def create_sample_note(front: str, back: str, css: str):
             'n.a fencing sword with a v-shaped blade and a slightly curved handle',
             'v.cut or injure with a saber',
         ],
+        'etymology': ('', '来自法语 sabre,弯剑，弯刀，异化自 sable,来自匈牙利语 szablya,弯刀，来自 szab,砍，劈。'),
         'phrase': [
             ('Saber Marionette', '机械女神；机械女神J；机械女神R'),
             ('Saber-toothed cat', '剑齿虎'),
@@ -244,6 +255,7 @@ def create_sample_note(front: str, back: str, css: str):
         'AmEPron': 'http://dict.youdao.com/dictvoice?audio=saber&type=2',
     }
     set_field_definition(note, api_data)
+    set_field_etymology(note, api_data)
     set_field_phrase(note, api_data)
     set_field_sentence(note, api_data)
     set_field_image(note, api_data)
@@ -271,6 +283,27 @@ def set_field_definition(note: notes.Note, query_data: QueryWordData) -> bool:
         note[C.F_DEFINITION] = to_field_definition(api_definition)
         return True
     return False
+
+
+def to_field_etymology(api_etym: tuple[str, str]) -> str:
+    chunk = []
+    if api_etym[0]:
+        chunk.append(f'<div class="etym-en">{api_etym[0]}</div>')
+    if api_etym[1]:
+        chunk.append(f'<div class="etym-zh">{api_etym[1]}</div>')
+    return ''.join(chunk)
+
+
+def set_field_etymology(note: notes.Note, query_data: QueryWordData) -> bool:
+    etym = query_data[C.F_ETYM]
+    if etym[0] or etym[1]:
+        note[C.F_ETYM] = to_field_etymology(etym)
+        return True
+    return False
+
+
+def empty_field_etymology(note: notes.Note):
+    note[C.F_ETYM] = ''
 
 
 def empty_field_definition(note: notes.Note):
