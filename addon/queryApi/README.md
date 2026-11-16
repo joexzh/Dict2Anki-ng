@@ -7,6 +7,7 @@
 {
     'term': str,
     'definition': [str],
+    'etymology': (str, str),
     'phrase': [(str,str)],
     'image': str,
     'sentence': [(str,str)],
