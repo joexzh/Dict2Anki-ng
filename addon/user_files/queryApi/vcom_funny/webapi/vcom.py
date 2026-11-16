@@ -280,9 +280,9 @@ def parse_sentences(json_obj: dict[str, T.Any]) -> list[Sentence]:
             s['offsets'] = tuple(item['offsets'])
             s['sentence'] = item['sentence']
             item_vol = item['volume']
-            s['author'] = item_vol['author']
-            s['title'] = item_vol['title']
-            s['date'] = item_vol['datePublished']
+            s['author'] = item_vol.get('author', '')
+            s['title'] = item_vol.get('title', '')
+            s['date'] = item_vol.get('datePublished', 0)
 
             ret.append(s)
     return ret

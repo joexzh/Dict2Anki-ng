@@ -64,12 +64,28 @@ def parse(vcom_word: VCOMWord) -> Optional[_T.QueryWordData]:
         else:
             chunks.append(f'{sen}')
 
-        # timestamp can be negative
+        title = vcom_s.get('title', '')
+        author = vcom_s.get('author', '')
         timestamp = vcom_s.get('date')
-        dt = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc) + datetime.timedelta(seconds=timestamp / 1000)
-        year = dt.year
 
-        chunks.append(f'<div><cite>{vcom_s["title"]}</cite> by {vcom_s["author"]}({year})</div>')
+        if title or author or timestamp != 0:
+            chunks.append('<div>')
+
+            if title:
+                chunks.append(f'<cite>{title}</cite>')
+
+            if author:
+                chunks.append(f' by {author}')
+
+            if timestamp != 0:
+                # timestamp can be negative
+                dt = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc) + datetime.timedelta(
+                    seconds=timestamp / 1000
+                )
+                year = dt.year
+                chunks.append(f'({year})')
+
+            chunks.append('</div>')
 
         # no front, only back
         sentence.append(('', ''.join(chunks)))
@@ -107,7 +123,9 @@ class API(_T.AbstractQueryAPI):
     """
 
     name = 'funny Vocabulary.com API'
-    desc = '无中文翻译，不适合所有人；释义摘取两段趣味解释，有可能为空；包含字段：释义、例句、英式音标、美式音标、美式发音'
+    desc = (
+        '无中文翻译，不适合所有人；释义摘取两段趣味解释，有可能为空；包含字段：释义、例句、英式音标、美式音标、美式发音'
+    )
     session = session
 
     @classmethod
