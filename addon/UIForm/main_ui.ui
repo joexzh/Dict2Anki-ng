@@ -722,6 +722,27 @@
           <string>修复字段</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="3">
+           <widget class="QCheckBox" name="repairPhraseCB">
+            <property name="text">
+             <string>短语</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="repairBrEPhoneticCB">
+            <property name="text">
+             <string>英式音标</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QCheckBox" name="repairImgCB">
+            <property name="text">
+             <string>图片</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QCheckBox" name="repairDefCB">
             <property name="text">
@@ -729,52 +750,38 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="0" column="2">
            <widget class="QCheckBox" name="repairSentenceCB">
             <property name="text">
              <string>例句</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QCheckBox" name="repairPhraseCB">
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="repairEtymCB">
             <property name="text">
-             <string>短语</string>
+             <string>词源</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
-           <widget class="QCheckBox" name="repairImgCB">
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="repairAmEPronCB">
             <property name="text">
-             <string>图片</string>
+             <string>美式发音</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="repairBrEPhoneticCB">
-            <property name="text">
-             <string>英式音标</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="repairAmEPhoneticCB">
-            <property name="text">
-             <string>美式音标</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
+          <item row="2" column="3">
            <widget class="QCheckBox" name="repairBrEPronCB">
             <property name="text">
              <string>英式发音</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="3">
-           <widget class="QCheckBox" name="repairAmEPronCB">
+          <item row="2" column="2">
+           <widget class="QCheckBox" name="repairAmEPhoneticCB">
             <property name="text">
-             <string>美式发音</string>
+             <string>美式音标</string>
             </property>
            </widget>
           </item>

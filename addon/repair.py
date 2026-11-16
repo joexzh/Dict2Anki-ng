@@ -134,20 +134,35 @@ class Repair:
 
     def _warning(self) -> str:
         conf = self._w.conf
+        e = conf.advanced_enabled
 
-        return rf"""默认设置:
+        rows = [
+            ('Deck：', conf.deck),
+            ('线上单词本：', f'{self._w.get_current_dict().name}{conf.current_selected_groups}'),
+        ]
 
-Deck：          {conf.deck}
-线上单词本：    {self._w.get_current_dict().name}{conf.current_selected_groups}
-查词API：       {self._w.get_current_api().name}
-释义：          {conf.advanced_definition if conf.advanced_enabled else conf.definition}
-例句：          {conf.advanced_sentence if conf.advanced_enabled else conf.sentence}
-短语：          {conf.advanced_phrase if conf.advanced_enabled else conf.phrase}
-图片：          {conf.advanced_image if conf.advanced_enabled else conf.image}
-英式音标：      {conf.advanced_BrEPhonetic if conf.advanced_enabled else conf.bre_phonetic}
-美式音标：      {conf.advanced_AmEPhonetic if conf.advanced_enabled else conf.ame_phonetic}
-英式发音：      {conf.advanced_BrEPron if conf.advanced_enabled else conf.bre_pron}
-美式发音：      {conf.advanced_AmEPron if conf.advanced_enabled else conf.ame_pron}"""
+        if not e:
+            rows.append(('查词API：', self._w.get_current_api().name))
+
+        rows.extend(
+            [
+                ('释义：', conf.advanced_definition if e else str(conf.definition)),
+                ('词源：', conf.advanced_etym if e else str(conf.etym)),
+                ('例句：', conf.advanced_sentence if e else str(conf.sentence)),
+                ('短语：', conf.advanced_phrase if e else str(conf.phrase)),
+                ('图片：', conf.advanced_image if e else str(conf.image)),
+                ('英式音标：', conf.advanced_BrEPhonetic if e else str(conf.bre_phonetic)),
+                ('美式音标：', conf.advanced_AmEPhonetic if e else str(conf.ame_phonetic)),
+                ('英式发音：', conf.advanced_BrEPron if e else str(conf.bre_pron)),
+                ('美式发音：', conf.advanced_AmEPron if e else str(conf.ame_pron)),
+            ]
+        )
+
+        tr_html = ''.join(
+            f"<tr><td style='padding-right: 15px; font-weight: bold;'>{k}</td><td>{v}</td></tr>" for k, v in rows
+        )
+
+        return f"默认设置:<table style='margin-top: 15px; margin-bottom: 15px;'>{tr_html}</table>"
 
     def _writeLogAndLabel(self, msg: str, label: aqt.QLabel):
         _logger.info(msg)
@@ -163,6 +178,9 @@ Deck：          {conf.deck}
 
         if self._w.repairDefCB.isChecked():
             selected_field_set.add(C.F_DEFINITION)
+
+        if self._w.repairEtymCB.isChecked():
+            selected_field_set.add(C.F_ETYM)
 
         if self._w.repairSentenceCB.isChecked():
             selected_field_set.add(C.F_SENTENCE)
@@ -208,7 +226,7 @@ Deck：          {conf.deck}
             return
 
         _logger.info(self._w.conf.print())
-        if not aqt.utils.askUser(f'{self._warning()}\n\n可能要花费较长时间，是否继续?', parent=self._w):
+        if not aqt.utils.askUser(f'{self._warning()}可能要花费较长时间，是否继续?', parent=self._w):
             return
 
         self._ensured_selected_dict = ast_dict
