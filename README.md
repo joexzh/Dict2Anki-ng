@@ -31,6 +31,9 @@ Anki --> 工具 --> 附加组件 --> 获取插件
 
 ## Change log
 
+* v7.5.0
+  * 增加字段 etymology（词源），内容从有道API中获得，请参考 [issue #11](https://github.com/joexzh/Dict2Anki-ng/issues/11)
+    * 用户请参照 default 模板自行修改用户模板
 * v7.4.3
   * 修复高级配置字段可能不会获取下一个 API 的问题
 * v7.4.2
